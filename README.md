@@ -6,3 +6,7 @@ Project for CS-456 Optimisation for ML
 Simulations has the code for testing GD, SGD, SVRG, and SAGA on Logistic Regression (Squared Norm)
 
 Report has the report and cites the relevant papers.
+
+## TODO
+
+Has anyone already investigated variance reduction methods to subgradient descent?
