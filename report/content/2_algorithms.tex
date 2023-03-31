@@ -1,0 +1,58 @@
+\section{Algorithms}
+
+In this section, we outline the four algorithms - GD, SGD, SVRG, and SAGA - and examine their theoretical properties. In particular, we examine their convergence results. We state rates of convergence in terms of $\epsilon$-accurate solutions with oracle calls for the gradient values: an algorithm converges with rate $\mathcal{O}\left(z\right)$ if $\left\|\nabla P\left(\mathbf{w}_k\right)\right\| \leq \epsilon$ when $k \geq z$. For these results, we assume all $f_i$ are Lipschitz continuous, however $f_i$ can be non-convex.
+
+\subsection{Gradient Descent}
+
+Gradient descent is the most fundamental incremental method for optimising continuous functions, simply stepping in the direction of the entire gradient $\nabla P\left({\mathbf{w}}_k \right)$ each iteration to move towards a local minimum. The formal algorithm for GD can be found in Appendix~\ref{app:formal_algorithms}. Following this gradient flow, GD has order $\mathcal{O}\left(\frac{n}{\epsilon}\right)$ convergence \cite{reddi2016stochastic}. For small $n$, this result is great, but for large $n$ this can quickly become computationally intractable.
+
+\subsection{Stochastic Gradient Descent}
+
+Stochastic gradient descent is the logical solution to GD's computaional issues for large $n$. SGD only computes the gradient of one randomly selected $f_i$ in each iteration, reducing the computational cost of each iteration by over a factor of $n$ (again, its formal algorothm can be found in Appendix~\ref{app:formal_algorithms}). As a result, SGD only has $\mathcal{O}\left(\frac{1}{\epsilon}\right)$ convergence \cite{bottou2018optimization}. So for small $n$, GD would be faster, but when $n$ is large (as is the case in many modern machine learning settings), SGD convergences faster.
+
+However, the stochasticity of SGD's method introduces variance into the algorithm and this leads to a significant disadvantage. SGD can only converge to an $\mathcal{O}\left(\eta\right)$-radius ball centered around the local minimum $w^*$, where $\eta$ is the constant step-size \cite{bottou2018optimization}. If $\eta$ varies, either using a step-size scheduler or a line-search, then SGD can converge to the local minimum, but then the rate of convergence reduces to $\mathcal{O}\left(\frac{1}{\epsilon^2}\right)$ \cite{reddi2016stochastic} and so many of its benefits are lost.
+
+\subsection{Stochastic Variance Reduced Gradient Method}
+
+As its name suggests, the stochastic variance reduced gradient method seeks to reduce SGD's variance, converging with a constant step-size while maintaining the better rate of convergence. This is done by using stochastic gradients to refine a full gradient that is completely updated less frequently. Algorithm~\ref{alg:svrg} sets out the formal SVRG algorithm.
+
+\begin{algorithm}[H] 
+    \caption{SVRG \cite{johnson2013accelerating}}
+    \KwIn{$\mathbf{w}_0 \in \mathbb{R}^d$ as starting point, step-size $\eta$ and size of inner loop $m$.}
+    \For{k = 0,1,2,...}{
+        Compute full gradient $\nabla P(\mathbf{w}_k)$. \\
+        Initialize $\Tilde{\mathbf{w}}_0 = \mathbf{w}_k$.\\
+        \For{j = 0,...,m-1}{
+            Select $i \in \{1,...,n\}$ uniformly at random. \\
+            Set $\Tilde{\mathbf{w}}_{j+1} = \Tilde{\mathbf{w}}_j -  \eta \lbrack \nabla P(\mathbf{w}_k) + \nabla f_i(\Tilde{\mathbf{w}}_j) - \nabla f_i(\mathbf{w}_k)\rbrack$.
+        }
+        Set $\mathbf{w}_{k+1} = \Tilde{\mathbf{w}}_m$.
+    }
+    \label{alg:svrg}
+\end{algorithm}
+
+Note that SVRG's update is the true gradient in expectation:
+\begin{equation}\label{stochastic gradient in SVRG}
+    \mathbb{E}[\nabla P(\mathbf{w}_k) + \nabla f_i(\Tilde{\mathbf{w}}_j) - \nabla f_i(\mathbf{w}_k)] = \nabla P(\mathbf{w}_k) + \nabla P(\Tilde{\mathbf{w}}_j) - \nabla P(\mathbf{w}_k) = \nabla P(\Tilde{\mathbf{w}}_j).
+\end{equation}
+In contrast to SGD, SVRG's update depends on the change in recent iterations, so its variance will reduce to $0$ as the algorithm converges. Thus, under certain conditions, SVRG will converge just as GD does. Overall, SVRG's order of convergence to the local minimum (not the step-size neighbourhood) is $\mathcal{O}\left(n + \frac{n^{\frac{2}{3}}}{\epsilon}\right)$ \cite{reddi2016stochastic}.
+
+\subsection{Stochastic Average Gradient Accelerated}
+
+Stochastic average gradient accelerated is very similar to SVRG: it seeks to reduce the variance of SGD's update by storing a table of all the $\nabla f_i$ of the full gradient and randomly selecting one to update each iteration. Algorithm~\ref{alg:saga} sets out the formal SAGA algorithm.
+
+\begin{algorithm}[bth]
+    \caption{SAGA \cite{defazio2014saga}}
+    \KwIn{$\mathbf{w}_0 \in \mathbb{R}^d$ as starting point, stepsize $\eta$ and a table containing the gradients $\nabla f_1(\mathbf{\phi}_1^0),...,\nabla f_n(\mathbf{\phi}_n^0)$, where we set $\mathbf{\phi}_1^0,...,\mathbf{\phi}_n^0 = \mathbf{w}_0$.}
+    \For{k = 0,1,2,...}{
+        Select $i \in \{1,...,n\}$ uniformly at random. \\
+        Set $\mathbf{\phi}_i^{k+1} = \mathbf{w}_k$ and update $\nabla f_i(\mathbf{\phi}_i^{k+1})$ in the table. All other entries in the table remain unchanged, hence $\mathbf{\phi}_j^{k+1} = \mathbf{\phi}_j^k \quad \forall j \in  \{1,...,n\}\setminus \{i\}$.\\
+        Set $\mathbf{w}_{k+1} = \mathbf{w}_k - \eta\lbrack \nabla f_i(\mathbf{\phi}_i^{k+1}) - \nabla f_i(\mathbf{\phi}_i^{k}) + \frac{1}{n}\sum_{i=0}^n \nabla f_i(\mathbf{\phi}_i^k)\rbrack$. \\
+    }
+    \label{alg:saga}
+\end{algorithm}
+We can see that the SAGA's update is equal to the true gradient in expectation:
+\begin{equation}\label{stochastic gradient in SAGA}
+    \mathbb{E}[\nabla f_i(\mathbf{\phi}_i^{k+1}) - \nabla f_i(\mathbf{\phi}_i^{k}) + \frac{1}{n}\sum_{i=0}^n \nabla f_i(\mathbf{\phi}_i^k))] = \nabla P({\mathbf{\phi}_i^{k+1}}) - \nabla P({\mathbf{\phi}_i^{k}}) + \nabla P({\mathbf{\phi}_i^{k}}) = \nabla P({\mathbf{w}}_k).
+\end{equation}
+Simiarly to SVRG, the variance of the update depends upon the change in recent iterations and so, under certain conditions, SAGA converges to the local minimum with constant step-size. As it doesn't update the full gradient after the first calculation, it even has a better rate of convergence with $\mathcal{O}\left(n + \frac{1}{\epsilon}\right)$ \cite{defazio2014saga}.

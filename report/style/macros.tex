@@ -1,0 +1,162 @@
+%----------------------------------------------------
+% Environments for Mathematics
+%----------------------------------------------------
+
+\newcommand{\prf}[1]{
+  \begin{quote}
+    \begin{proof}
+      {#1}
+    \end{proof}
+  \end{quote}
+}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{assumption}{Assumption}[section]
+
+\newcommand{\thm}[2]{
+  \begin{mdframed}
+    \begin{theorem}[{#1}]\label{thm:\thetheorem}
+      {#2}
+    \end{theorem}\noindent
+  \end{mdframed}
+}
+
+\newcommand{\prp}[2]{
+  \begin{mdframed}
+    \begin{proposition}[{#1}]\label{prop:\theproposition}
+      {#2}
+    \end{proposition}\noindent
+  \end{mdframed}
+}
+
+\newcommand{\lmm}[2]{
+  \begin{mdframed}
+    \begin{lemma}[{#1}]\label{lemma:\thelemma}
+      {#2}
+    \end{lemma}\noindent
+  \end{mdframed}
+}
+
+\newcommand{\cor}[2]{
+  \begin{mdframed}
+    \begin{corollary}[{#1}]\label{cor:\thecorollary}
+      {#2}
+    \end{corollary}\noindent
+  \end{mdframed}
+}
+
+\newcommand{\dft}[2]{
+  \begin{mdframed}
+    \begin{definition}[{#1}]\label{def:\thedefinition}
+      {#2}
+    \end{definition}\noindent
+  \end{mdframed}
+}
+
+\newcommand{\asmpt}[2]{
+  \begin{mdframed}
+    \begin{assumption}[{#1}]\label{asmpt:\theassumption}
+      {#2}
+    \end{assumption}\noindent
+  \end{mdframed}
+}
+
+\newcommand{\qa}[2]{
+  \begin{quote}
+    \textsc{Question}: {#1} \\
+    \textsc{Answer}: {#2}
+  \end{quote}
+}
+
+\newcommand{\question}[1]{
+  \textbf{{#1}}
+}
+
+\newcommand{\answer}[1]{
+  \textsc{Answer}: {#1}
+}
+
+\newcommand{\hint}[1]{
+  \textit{Hint: {#1}}
+}
+
+\newcommand{\eg}[2]{
+  \begin{quote}
+    \textsc{Example} - \textsc{{#1}}: {#2}
+  \end{quote}
+}
+
+\newcommand{\note}[1]{
+  \textsc{Note}: {#1}
+}
+
+%----------------------------------------------------
+% Labelling
+%----------------------------------------------------
+
+% Equation labelling
+\numberwithin{equation}{section}
+\newcommand{\labeq}{\label{eq:\theequation}}
+
+% Algorithm labelling: https://tex.stackexchange.com/questions/113403/how-to-use-nameref-with-algorithm2e
+\makeatletter
+\let\original@algocf@latexcaption\algocf@latexcaption
+\long\def\algocf@latexcaption#1[#2]{%
+  \@ifundefined{NR@gettitle}{%
+    \def\@currentlabelname{#2}%
+  }{%
+    \NR@gettitle{#2}%
+  }%
+  \original@algocf@latexcaption{#1}[{#2}]%
+}
+\makeatother
+
+%----------------------------------------------------
+% Letters
+%----------------------------------------------------
+
+% Blackboard Bold Letters
+
+\newcommand{\Z}{\ensuremath{\mathbb{Z}}}
+\newcommand{\C}{\ensuremath{\mathbb{C}}}
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\F}{\ensuremath{\mathbb{F}}}
+\newcommand{\N}{\ensuremath{\mathbb{N}}}
+\newcommand{\Q}{\ensuremath{\mathbb{Q}}}
+\newcommand{\A}{\ensuremath{\mathbb{A}}}
+\renewcommand{\P}{\ensuremath{\mathbb{P}}}
+\newcommand{\E}{\ensuremath{\mathbb{E}}}
+\newcommand{\V}{\ensuremath{\mathbb{V}}}
+
+%----------------------------------------------------
+% Other Commands
+%----------------------------------------------------
+
+\newcommand{\shrug}[1][]{%
+\begin{tikzpicture}[baseline,x=0.8\ht\strutbox,y=0.8\ht\strutbox,line width=0.125ex,#1]
+\def\arm{(-2.5,0.95) to (-2,0.95) (-1.9,1) to (-1.5,0) (-1.35,0) to (-0.8,0)};
+\draw \arm;
+\draw[xscale=-1] \arm;
+\def\headpart{(0.6,0) arc[start angle=-40, end angle=40,x radius=0.6,y radius=0.8]};
+\draw \headpart;
+\draw[xscale=-1] \headpart;
+\def\eye{(-0.075,0.15) .. controls (0.02,0) .. (0.075,-0.15)};
+\draw[shift={(-0.3,0.8)}] \eye;
+\draw[shift={(0,0.85)}] \eye;
+% draw mouth
+\draw (-0.1,0.2) to [out=15,in=-100] (0.4,0.95); 
+\end{tikzpicture}}
+
+\newcommand{\la}{\ensuremath{\left\langle}}
+\newcommand{\ra}{\ensuremath{\right\rangle}}
+
+\newcommand{\PP}{\ensuremath{\mathcal{P}}}
+\newcommand{\beegO}{\ensuremath{\mathcal{O}}}
+\newcommand{\ep}{\varepsilon}
+\let\emptyset\varnothing
+\newcommand{\diff}[1]{\ensuremath{\ \text{d}{#1}}}
+\renewcommand{\vec}[1]{\ensuremath{\mathbf{#1}}}

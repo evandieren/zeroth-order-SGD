@@ -1,0 +1,13 @@
+\section{Introduction}
+
+Many machine learning methods are trained through empirical risk minimisation (ERM):
+\begin{equation}\label{Empirical Risk}
+    \text{minimize} \quad \hat{\mathcal{R}}_n(f) = \frac{1}{n}\sum_{i=1}^{n}\ell(f(\mathbf{x}_i; \mathbf{w}), y_i),
+\end{equation}
+where $D_n = \{(\mathbf{x}_1, y_1),...,(\mathbf{x}_n, y_n)\} \subset \mathcal{X} \times \mathcal{Y}$ is the training set and $\ell$ is a loss function. For example, logistic regression corresponds to the problem where $\ell\left(a,y\right) = \log\left(1+e^{-ya}\right)$, $f\left(\mathbf{x}; \mathbf{w}\right) = \mathbf{w}^\top \mathbf{x}, \, \mathbf{w} \in \R^d$, and $\mathcal{Y} = \left\{-1, +1\right\}$. Closed form solutions for ERM problems often don't exist, and even if they do, are frequently very computationally expensive. Consequently, incremental algorithms are usually used instead: methods that produce a sequence of values $\left\{\mathbf{w}_k\right\}_{k = 0}^\infty$ that converge to the true solution $\mathbf{w}^*$. We consider incremental algorithms that solve ERM problems of the form
+\begin{equation}\label{GeneralProb}
+   \text{minimize} \quad P(\mathbf{w}) = \frac{1}{n} \sum_{i = 0}^n f_i(\mathbf{w}), \quad \mathbf{w} \in \R^d,
+\end{equation}
+where each $f_i : \R^d \to \R$ and $f_i\left(\cdot\right) = \ell\left(f\left(\mathbf{x}_i;\cdot\right),y_i\right)$.
+
+In particular, we examine gradient descent (GD), stochastic gradient descent (SGD), stochastic variance reduced gradient method (SVRG), and stochastic average gradient accelerated (SAGA), evaluating their performance in solving the ERM problem for logistic regression. Furthermore, we investigate the impact of step-size on the convergence of these methods.

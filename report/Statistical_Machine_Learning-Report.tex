@@ -1,0 +1,139 @@
+% This template is based off one created by:
+% Pascal Bercher, pascal.bercher@anu.edu.au (Version 1.00, 2021/12/03)
+
+%----------------------------------------------------
+% Document Set-up
+%----------------------------------------------------
+\documentclass[a4paper,twoside,cleardoublepage=plain,bibliography=totoc,headings=openany]{scrarticle}
+
+% Margins and Title Page
+\usepackage[a4paper, margin=2.5cm]{geometry}
+
+% Standard Mathematics Packages
+\usepackage{amssymb,amsthm,amsmath,bbold,graphicx}
+
+% Referencing and formatting links
+\usepackage{xurl}
+\usepackage[backref=page]{hyperref}
+\hypersetup{
+  linktocpage, % in the table of contents, the numbers serve as links, not the entries
+  colorlinks  = true, % the items are colored instead of colored boxes around them
+  urlcolor    = cyan,
+  linkcolor   = red,
+  citecolor   = blue
+}
+% the following makes back references more appealing.
+% Taken from: https://tex.stackexchange.com/questions/183702/formatting-back-references-in-bibliography-bibtex
+\renewcommand*{\backref}[1]{}
+\renewcommand*{\backrefalt}[4]{[%
+\ifcase #1 Not cited.%
+  \or Cited on page~#2.%
+  \else Cited on pages #2.%
+\fi]}
+\usepackage{cleveref}
+
+% Date and Time
+\usepackage{datetime}
+\newdateformat{monthonly}{\monthname[\THEMONTH]}
+
+% Placement
+% \usepackage{float}
+\usepackage{floatrow} % allows to place a caption next to a figure
+\floatsetup[table]{capposition=top} %  forces table captions to appear on top.
+\usepackage{caption}
+\usepackage{subcaption}
+
+% Tables and Matrices
+\usepackage{booktabs} % for tables that actually look nice!
+\usepackage{multirow}
+\usepackage{array}
+
+% Boxing
+\usepackage{mdframed}
+
+% Indentation
+\usepackage{parskip} % when this is included, no indentations are used for new paragraphs, and instead paragraphs are separated by a small distance between them
+
+% Lists
+% \usepackage{enumitem}
+% \setlist[enumerate,1]{label={(\roman*)}}
+\usepackage{paralist} % provides compactitem, a more compact itemize
+
+% Fancy Figures
+\usepackage{tikz}
+\usetikzlibrary{matrix}
+\usetikzlibrary{arrows}
+
+% Algorithms
+\usepackage[ruled,vlined]{algorithm2e}
+
+% Bibliography
+\usepackage[semicolon, square, numbers]{natbib} % a specific citation style
+\bibliographystyle{plainnat}
+
+% % Formatting Chapter Title Pages
+% \usepackage{titlesec} % used to add those horizontal lines around chapter package; see defs below.
+% \usepackage[standardsections]{scrhack} % fixes an error causes by loading titlesec for class scrbook
+% % [requires titlesec]
+% % Surrounds all chapter titles by lines (see screenshot),
+% % which includes the titles in the TOC and list of figures and tables
+% \titleformat{\chapter}[display]
+% {\bfseries\huge}
+% {\filleft\Large\chaptertitlename~\thechapter}
+% {3ex}
+% {\titlerule\vspace{1.5ex}\filright}
+% [\vspace{1ex}\titlerule]
+
+% \renewcommand{\chaptername}{Chapter}
+
+% fixes a compilation error that otherwise occurs in combination with scrbook
+% see https://tex.stackexchange.com/questions/625083/adding-horizontal-line-before-and-after-chapter-heading-in-scrbook
+% \titleformat{\section}
+%  {\normalfont\Large\bfseries}{\thesection}{1em}{}
+% \titleformat{\subsection}
+%  {\normalfont\large\bfseries}{\thesubsection}{1em}{}
+% \titleformat{\subsubsection}
+%  {\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{}
+ 
+%----------------------------------------------------
+% Configurations and Macros
+%----------------------------------------------------
+
+\input{style/configuration} % to specify data used in the title page
+\input{style/macros} % define all your macros here
+
+%----------------------------------------------------
+% Top Matter
+%----------------------------------------------------
+
+\begin{document}
+
+\pagenumbering{roman}
+\input{style/titlepage.tex}
+
+% table of contents (nothing to do for you)
+% \renewcommand{\contentsname}{Table of Contents}
+% \setcounter{tocdepth}{1}
+% \tableofcontents
+% \clearpage
+
+%----------------------------------------------------
+% Content
+%----------------------------------------------------
+
+\pagenumbering{arabic}
+
+\input{content/main.tex}
+
+%----------------------------------------------------
+% End Matter
+%----------------------------------------------------
+
+% Literature
+\bibliography{mybib.bib}
+
+% Appendix
+\appendix
+\input{content/appendix.tex}
+
+\end{document}

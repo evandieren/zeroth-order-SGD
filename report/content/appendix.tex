@@ -1,0 +1,19 @@
+\section{Formal Algorithms}\label{app:formal_algorithms}
+In this section we will present the algorithms GD and SGD to solve \eqref{GeneralProb}.
+
+\begin{algorithm}[H] 
+    \caption{Gradient descent}
+    \KwIn{$\mathbf{w}_0 \in \mathbb{R}^p$ as starting point, stepsize $\eta$.}
+    \For{k = 0,1,2,...}{
+        Set $\mathbf{w}_{k+1} = \mathbf{w}_k - \eta \nabla P(\mathbf{w}_k)$ \\
+    }
+\end{algorithm}
+
+\begin{algorithm}[H]
+    \caption{Stochastic gradient descent}
+    \KwIn{$\mathbf{w}_0 \in \mathbb{R}^p$ as starting point, stepsize $\eta$.}
+    \For{k = 0,1,2,...}{
+        Select $i \in \{1,...,n\}$ uniformly at random. \\
+        Set $\mathbf{w}_{k+1} = \mathbf{w}_k - \eta \nabla f_i(\mathbf{w}_k)$ \\
+    }
+\end{algorithm}

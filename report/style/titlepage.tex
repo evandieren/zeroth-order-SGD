@@ -1,0 +1,53 @@
+%
+% This document contains two different definitions of the title page
+% which one is chosen is defined in the file configuration.tex
+%
+
+% only the title page is centered; all other pages are aligned according to books
+\newgeometry{left=2.5cm,right=2.5cm,top=4cm}
+\thispagestyle{empty}
+
+\newdateformat{monthyeardate}{%
+  \monthname[\THEMONTH] \THEYEAR}
+
+\noindent
+\begin{minipage}[t]{6cm}%
+{\footnotesize%
+\raisebox{-\height}{{\bfseries \University}} \\
+\Location}
+\end{minipage}%
+\hfill%
+\begin{minipage}[b]{10cm}%
+\hfill\raisebox{-\height}{\includegraphics[height=3 cm]{style/\Logo}}
+\end{minipage}
+
+\ \\[2em]
+\phantom{x} \hfill\parbox[t]{50 mm}{\bfseries \School\\[.5em]
+\hfill\mdseries \College}\\[6 em]
+\hfill
+
+\noindent
+\parbox{140mm}{\sffamily \bfseries \huge %
+\Title%
+}\\[.75 em]
+{--- \CourseCode~\textbar~\CourseName~\textbar~(\Semester{} \Year)}\\[3 em]
+
+% Degree\\
+% \emph{\Degree}\\[3 em]
+
+\noindent
+{\footnotesize \textbf By:}\\
+\AuthorName\\[2em]
+
+% \noindent
+% {\footnotesize \textbf Collaboration:}\\
+% {\footnotesize \CollabName}\\[2em]
+
+\noindent
+{\footnotesize \bfseries Professor\ifTwoProfs{}s\fi:}\\
+{\footnotesize \FirstProf%
+\ifTwoProfs\\\SecondProf\fi}\\[2 em]
+\vfill
+{\footnotesize \monthyeardate\today}
+
+\restoregeometry
