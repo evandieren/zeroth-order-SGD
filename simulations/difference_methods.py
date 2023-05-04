@@ -7,7 +7,7 @@ def n_sphere_sample(shape):
         sample = np.random.uniform(-1.0, 1.0, shape)
     return sample / np.linalg.norm(sample, ord=2)
 
-def single_point_estimate(f, x : np.ndarray, mu : float, n : int = 1):
+def one_point_estimate(f, x : np.ndarray, mu : float, n : int = 1):
     """ Single point estimate for derivative """
     # Checks
     assert n > 0, f"Input {n=} must be greater than zero."
