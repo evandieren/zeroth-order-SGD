@@ -1,4 +1,4 @@
-import numpy as np
+import math
 import torch
 from torch.autograd import Function
 from torch.autograd.function import once_differentiable
@@ -25,11 +25,9 @@ class Linear_Zeroth_Function(Function):
         elif difference_method == "two":
             ctx.diff = lambda f, x: two_point_estimate(f, x, mu, n)
         elif difference_method == "coord":
-            ctx.diff = lambda f, x: two_point_estimate(f, x, mu, n)
+            ctx.diff = lambda f, x: coordinate_estimate(f, x, mu)
         else:
             raise ValueError(f"Input {difference_method=} must be 'one', 'two', or 'coord'.")
-        # Mark non_differentiable inputs as such
-        ctx.mark_non_differentiable(difference_method, mu, n)
         
         # Return output
         return forward_helper(input, weight, bias)
@@ -53,8 +51,8 @@ class Linear_Zeroth_Function(Function):
             estimated_grad = ctx.diff(lambda x: forward_helper(input, weight, x), bias)
             grad_bias = grad_output.mm(estimated_grad)
 
-        # Return gradients for differentiable inputs 
-        return grad_input, grad_weight, grad_bias
+        # Return gradients for inputs 
+        return grad_input, grad_weight, grad_bias, None, None, None
 
 class Linear_Zeroth(torch.nn.Module):
     """ Version of Linear module with zeroth order gradient back-end
@@ -97,16 +95,14 @@ class Linear_Zeroth(torch.nn.Module):
         # Setting a=sqrt(5) in kaiming_uniform is the same as initializing with
         # uniform(-1/sqrt(in_features), 1/sqrt(in_features)). For details, see
         # https://github.com/pytorch/pytorch/issues/57109
-        torch.nn.init.kaiming_uniform_(self.weight, a=np.sqrt(5))
+        torch.nn.init.kaiming_uniform_(self.weight, a=math.sqrt(5))
         if self.bias is not None:
             fan_in, _ = torch.nn.init._calculate_fan_in_and_fan_out(self.weight)
-            bound = 1 / np.sqrt(fan_in) if fan_in > 0 else 0
+            bound = 1 / math.sqrt(fan_in) if fan_in > 0 else 0
             torch.nn.init.uniform_(self.bias, -bound, bound)
 
     def forward(self, input: torch.Tensor) -> torch.Tensor:
         return Linear_Zeroth_Function.apply(input, self.weight, self.bias, self.difference_method, self.mu, self.n)
 
     def extra_repr(self) -> str:
-        return 'in_features={}, out_features={}, bias={}, difference_method={}(mu={},n={})'.format(
-            self.in_features, self.out_features, self.bias is not None, self.mu, self.n
-        )
+        return 'in_features={}, out_features={}, bias={}, difference_method={}(mu={},n={})'.format(self.in_features, self.out_features, self.bias is not None, self.difference_method, self.mu, self.n)
