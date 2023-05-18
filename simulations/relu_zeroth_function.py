@@ -39,7 +39,7 @@ class ReLU_Zeroth_Function(Function):
         # Calculate gradients if needed
         if ctx.needs_input_grad[0]:
             estimated_grad = ctx.diff(input)
-            grad_input = grad_output * estimated_grad # FIXME
+            grad_input = grad_output * estimated_grad
 
         # Return gradients for inputs 
         return grad_input, None, None, None
