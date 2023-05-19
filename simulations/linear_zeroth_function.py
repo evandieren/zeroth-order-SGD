@@ -42,14 +42,14 @@ class Linear_Zeroth_Function(Function):
         
         # Calculate gradients if needed
         if ctx.needs_input_grad[0]:
-            estimated_grad = ctx.diff(lambda x: forward_helper(x, weight, bias), input)
+            estimated_grad = ctx.diff(lambda x: forward_helper(input, x, bias), weight)
             grad_input = grad_output.mm(estimated_grad)
         if ctx.needs_input_grad[1]:
-            estimated_grad = ctx.diff(lambda x: forward_helper(input, x, bias), weight)
+            estimated_grad = ctx.diff(lambda x: forward_helper(x, weight, bias), input)
             grad_weight = grad_output.t().mm(estimated_grad)
         if bias is not None and ctx.needs_input_grad[2]:
             estimated_grad = ctx.diff(lambda x: forward_helper(input, weight, x), bias)
-            grad_bias = grad_output.mm(estimated_grad)
+            grad_bias = grad_output.mm(estimated_grad) # FIXME
 
         # Return gradients for inputs 
         return grad_input, grad_weight, grad_bias, None, None, None
