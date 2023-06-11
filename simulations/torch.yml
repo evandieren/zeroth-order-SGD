@@ -16,3 +16,4 @@ dependencies:
   - nbformat
   - python-kaleido
   - pytorch
+  - ipywidgets

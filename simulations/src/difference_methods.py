@@ -3,9 +3,7 @@ import torch
 
 def n_sphere_sample(shape):
     """ Rejection method for sampling on unit-sphere """
-    sample = np.array([2])
-    while np.linalg.norm(sample, ord=2) > 1:
-        sample = np.random.uniform(-1.0, 1.0, shape)
+    sample = np.random.normal(loc=0, scale=1, size=shape)
     return np.float32((sample / np.linalg.norm(sample, ord=2)))
 
 def one_point_estimate(f, x : np.ndarray, mu : float, n : int = 1):
