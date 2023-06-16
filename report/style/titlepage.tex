@@ -1,14 +1,11 @@
-%
-% This document contains two different definitions of the title page
-% which one is chosen is defined in the file configuration.tex
-%
-
 % only the title page is centered; all other pages are aligned according to books
 \newgeometry{left=2.5cm,right=2.5cm,top=4cm}
 \thispagestyle{empty}
 
 \newdateformat{monthyeardate}{%
   \monthname[\THEMONTH] \THEYEAR}
+
+\onecolumn
 
 \noindent
 \begin{minipage}[t]{6cm}%
@@ -18,12 +15,11 @@
 \end{minipage}%
 \hfill%
 \begin{minipage}[b]{10cm}%
-\hfill\raisebox{-\height}{\includegraphics[height=3 cm]{style/\Logo}}
+\hfill\raisebox{-\height}{\includegraphics[height=1 cm]{style/\Logo}}
 \end{minipage}
 
-\ \\[2em]
-\phantom{x} \hfill\parbox[t]{50 mm}{\bfseries \School\\[.5em]
-\hfill\mdseries \College}\\[6 em]
+\ \\[1.5em]
+\phantom{x} \hfill\parbox[t]{50.75 mm}{\flushright \bfseries \School}\\[6 em]
 \hfill
 
 \noindent
@@ -44,7 +40,7 @@
 % {\footnotesize \CollabName}\\[2em]
 
 \noindent
-{\footnotesize \bfseries Professor\ifTwoProfs{}s\fi:}\\
+{\footnotesize \bfseries Professors\ifTwoProfs{}s\fi:}\\
 {\footnotesize \FirstProf%
 \ifTwoProfs\\\SecondProf\fi}\\[2 em]
 \vfill
